@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LexvuIP – Coming Soon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+    --navy: #632d3a;
+    --slate: #334155;
+    --muted: #64748b;
+    --gold: #f7edf0;
+    --cream: #faf9f7;
+
+    --playfair-display: "Playfair Display", serif;
+    --instrument-sans: "Lato", sans-serif;
+    --cursive-font: "Dancing Script", cursive;
+
+}
+
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fadeUp {
+      animation: fadeUp 0.9s ease-out forwards;
+    }
+
+    html, body {
+      scroll-behavior: smooth;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body class="bg-[--cream] text-[--slate] font-['Lato',sans-serif] antialiased flex flex-col min-h-screen">
+
+  <!-- HERO SECTION -->
+  <main class="flex-grow flex items-center justify-center px-6 py-10 md:py-20">
+    <div class="w-full max-w-5xl mx-auto text-center fadeUp">
+
+      <!-- Logo -->
+      <!-- <img src="https://i.imgur.com/3O0gN2Y.png"
+           class="h-16 md:h-20 mx-auto mb-6 md:mb-10"
+           alt="LexvuIP" /> -->
+
+      <!-- Company name -->
+      <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-[--navy]" style="font-family: var(--cursive-font);">
+        LexvuIP
+      </h1>
+      
+      
+
+      <!-- Tagline -->
+      <p class="mt-4 text-lg sm:text-xl md:text-2xl text-[--slate]/80">
+        “Precision in Every Line, Protection in Every Drawing”
+      </p>
+
+      <!-- Sub-headline -->
+      <p class="max-w-2xl mx-auto mt-6 text-base sm:text-lg md:text-xl text-[--muted]">
+        Built for U.S. attorneys who demand USPTO-ready patent drawings, bullet-proof compliance, and 24-hour turn-arounds.  
+        A new standard in patent illustration launches soon.
+      </p>
+
+      <!-- Notify CTA -->
+      <form id="notifyForm" class="mt-10 max-w-md mx-auto">
+        <p class="mb-2 text-sm tracking-wide text-[--muted]">
+          Get notified the moment we open the doors.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="email" required placeholder="Enter your email"
+                 class="flex-1 px-4 py-3 rounded border border-slate-300 focus:outline-none focus:border-[--gold] transition text-sm sm:text-base" />
+                 <button id="submitBtn" type="submit"
+                    class="px-6 py-3 rounded transition-colors text-sm sm:text-base flex items-center justify-center gap-2"
+                    style="background-color: var(--navy); color: var(--gold);"
+                    onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--navy)'"
+                    onmouseout="this.style.backgroundColor='var(--navy)'; this.style.color='var(--gold)'"
+                    >
+                    <svg id="spinner" class="animate-spin h-5 w-5 text-[--gold] hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    <span id="btnText">Notify Me</span>
+</button>
+
+               
+        </div>
+        <p id="msg" class="mt-3 text-sm text-green-700 opacity-0">Thank you! We'll be in touch.</p>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-6 text-center text-sm text-[--muted]">
+    © <span id="year"></span> LexvuIP Inc. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('notifyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      const emailInput = e.target.querySelector('input[type="email"]');
+      const email = emailInput.value;
+  
+      const btn = document.getElementById('submitBtn');
+      const spinner = document.getElementById('spinner');
+      const btnText = document.getElementById('btnText');
+  
+      // Start loading
+      spinner.classList.remove('hidden');
+      btn.disabled = true;
+      btn.style.opacity = "0.7";
+
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbzDrms3A-J-h4ho8KmfMuXkYY6J7Vrv5zM5sOJ7KhchMdQ2nQmSJqlu8JEOy2PsWG8e5A/exec"
+  
+      try {
+        await fetch(webAppUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `email=${encodeURIComponent(email)}`
+        });
+  
+        document.getElementById('msg').textContent = "Thank you! We'll be in touch.";
+        document.getElementById('msg').classList.remove('opacity-0');
+        e.target.reset();
+      } catch (err) {
+        document.getElementById('msg').textContent = "Something went wrong. Please try again.";
+        document.getElementById('msg').classList.remove('opacity-0');
+      } finally {
+        // Stop loading
+        spinner.classList.add('hidden');
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    });
+  
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  
+  
+</body>
+</html>
