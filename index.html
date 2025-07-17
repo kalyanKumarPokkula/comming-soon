@@ -68,8 +68,7 @@
 
       <!-- Sub-headline -->
       <p class="max-w-2xl mx-auto mt-6 text-base sm:text-lg md:text-xl text-[--muted]">
-        Built for U.S. attorneys who demand USPTO-ready patent drawings, bullet-proof compliance, and 24-hour turn-arounds.  
-        A new standard in patent illustration launches soon.
+        Built for IP professionals who demand quality with precision drawings, and fast turnaround* with competitive pricing. A new.....rest same.
       </p>
 
       <!-- Notify CTA -->
@@ -80,18 +79,22 @@
         <div class="flex flex-col sm:flex-row gap-3">
           <input type="email" required placeholder="Enter your email"
                  class="flex-1 px-4 py-3 rounded border border-slate-300 focus:outline-none focus:border-[--gold] transition text-sm sm:text-base" />
-                 <button id="submitBtn" type="submit"
-                    class="px-6 py-3 rounded transition-colors text-sm sm:text-base flex items-center justify-center gap-2"
-                    style="background-color: var(--navy); color: var(--gold);"
-                    onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--navy)'"
-                    onmouseout="this.style.backgroundColor='var(--navy)'; this.style.color='var(--gold)'"
-                    >
-                    <svg id="spinner" class="animate-spin h-5 w-5 text-[--gold] hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                    </svg>
-                    <span id="btnText">Notify Me</span>
-</button>
+                <button id="submitBtn" type="submit"
+                  class="px-6 py-3 rounded transition-colors text-sm sm:text-base flex items-center justify-center gap-2"
+                  style="background-color: var(--navy); color: var(--gold);"
+                  onmouseover="this.style.backgroundColor='var(--gold)'; this.style.color='var(--navy)'"
+                  onmouseout="this.style.backgroundColor='var(--navy)'; this.style.color='var(--gold)'"
+                >
+                  <svg id="spinner"
+                    class="animate-spin h-5 w-5 text-[--gold]"
+                    style="display: none;"  <!-- ✅ Change here -->
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  <span id="btnText">Notify Me</span>
+                </button>
+
 
                
         </div>
@@ -105,50 +108,53 @@
     © <span id="year"></span> LexvuIP Inc. All rights reserved.
   </footer>
 
-  <script>
-    document.getElementById('notifyForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-  
-      const emailInput = e.target.querySelector('input[type="email"]');
-      const email = emailInput.value;
-  
-      const btn = document.getElementById('submitBtn');
-      const spinner = document.getElementById('spinner');
-      const btnText = document.getElementById('btnText');
-  
-      // Start loading
-      spinner.classList.remove('hidden');
-      btn.disabled = true;
-      btn.style.opacity = "0.7";
+<script>
+  document.getElementById('notifyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbzDrms3A-J-h4ho8KmfMuXkYY6J7Vrv5zM5sOJ7KhchMdQ2nQmSJqlu8JEOy2PsWG8e5A/exec"
-  
-      try {
-        await fetch(webAppUrl, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: `email=${encodeURIComponent(email)}`
-        });
-  
-        document.getElementById('msg').textContent = "Thank you! We'll be in touch.";
-        document.getElementById('msg').classList.remove('opacity-0');
-        e.target.reset();
-      } catch (err) {
-        document.getElementById('msg').textContent = "Something went wrong. Please try again.";
-        document.getElementById('msg').classList.remove('opacity-0');
-      } finally {
-        // Stop loading
-        spinner.classList.add('hidden');
-        btn.disabled = false;
-        btn.style.opacity = "1";
-      }
-    });
-  
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+    const emailInput = e.target.querySelector('input[type="email"]');
+    const email = emailInput.value;
+
+    const btn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btnText');
+
+    // Show loading state
+    spinner.style.display = 'inline-block';
+    btnText.style.display = 'none';
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzDrms3A-J-h4ho8KmfMuXkYY6J7Vrv5zM5sOJ7KhchMdQ2nQmSJqlu8JEOy2PsWG8e5A/exec";
+
+    try {
+      await fetch(webAppUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `email=${encodeURIComponent(email)}`
+      });
+
+      document.getElementById('msg').textContent = "Thank you! We'll be in touch.";
+      document.getElementById('msg').classList.remove('opacity-0');
+      e.target.reset();
+    } catch (err) {
+      document.getElementById('msg').textContent = "Something went wrong. Please try again.";
+      document.getElementById('msg').classList.remove('opacity-0');
+    } finally {
+      // Hide loading state
+      spinner.style.display = 'none';
+      btnText.style.display = 'inline';
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    }
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
   
   
 </body>
